@@ -1,2 +1,3 @@
 # cappuccino-web
-Angular Js Client for Owndrive
+
+Angular Js Client for Cappuccino
