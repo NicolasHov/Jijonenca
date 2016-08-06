@@ -1,2 +1,2 @@
-# owndrive_client
+# owndrive-client
 Angular Js Client for Owndrive
