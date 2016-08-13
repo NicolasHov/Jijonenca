@@ -1,4 +1,4 @@
-var owndriveWebClient = angular.module('owndriveWebClient', [])
+var cappuccinoWebClient = angular.module('cappuccinoWebClient', [])
     .controller('controller', ['$scope', '$http', function($scope, $http) {
         $scope.command = "ls";
         $scope.currentDir = "/";
