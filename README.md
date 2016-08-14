@@ -1,5 +1,7 @@
 # cappuccino-web
 
+<img src="cappuccino.png" width="250" align="right">
+
 [![Join the chat at https://gitter.im/cappuccino-app/cappuccino-web](https://badges.gitter.im/cappuccino-app/cappuccino-web.svg)](https://gitter.im/cappuccino-app/cappuccino-web?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Angular Js Client for Cappuccino
