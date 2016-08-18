@@ -1,11 +1,11 @@
-var cappuccinoWebClient = angular.module('cappuccinoWebClient', [])
-    .controller('controller', ['$scope', '$http', function($scope, $http) {
+var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
+    .controller('controller', ['$scope', '$http', 'CommandsService', function($scope, $http, $CommandsService) {
         $scope.command = "ls";
         $scope.currentDir = "/";
         $scope.homePage = false;
         $showUploadForm = false;
-
-        $scope.allowed_commands = ["ls", "cp", "mv", "dw", "up"];
+        $scope.files = {};
+        $scope.allowed_commands = ["ls", "cp", "mv", "dw", "up", "find"];
 
         $scope.sendCommandRequest = function(command) {
             /* LS command */
@@ -18,7 +18,12 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', [])
                 $showUploadForm = true;
                 return;
             } else if ($scope.command.startsWith("ls")) {
-                console.log("LOG-LS")
+                $CommandsService.ls($scope.currentDir).then(function(data) {
+                    console.log("TEST: " + JSON.stringify(data));
+                    $scope.files = JSON.stringify(data);
+                });
+                return;
+            } else if ($scope.command.startsWith("find")) {
                 $http.get("/command/", {
                         params: {
                             "command": command,
@@ -39,7 +44,7 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', [])
                             $scope.files = data;
 
                             /* updating current dir */
-                            if ($scope.command !== "ls") { /* if ls has a parameter */
+                            if ($scope.command !== "find") { /* if ls has a parameter */
                                 console.log("Command: " + $scope.command);
                                 var ls_path = $scope.command.split(" ")[1];
                                 if (ls_path === "..") {
