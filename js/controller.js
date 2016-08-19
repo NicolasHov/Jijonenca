@@ -11,14 +11,13 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
             /* LS command */
             console.log("COMANDOLO : " + $scope.command);
             if ($scope.command.startsWith("dw")) {
-                console.log("LOG :" + $scope.command);
                 location.replace('/download/?command=' + $scope.command + '&currentDir=' + $scope.currentDir);
             } else if ($scope.command.startsWith("up")) {
                 console.log("LOG :" + $scope.command);
                 $showUploadForm = true;
                 return;
             } else if ($scope.command.startsWith("ls")) {
-                $CommandsService.ls($scope.currentDir).then(function(data) {
+                $CommandsService.ls($scope.command, $scope.currentDir).then(function(data) {
                     var output = [];
                     for (i = 0; i < Object.keys(data.data).length; i++) {
                         output.push(data.data[i]);
