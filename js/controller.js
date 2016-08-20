@@ -7,16 +7,22 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
         $scope.files = {};
         $scope.allowed_commands = ["ls", "cp", "mv", "dw", "up", "find"];
 
+        /*
+         * This function sends different command requests to the Server by sending a GET
+         * request to /command/ API entry point through our custom Angular module CommandsService
+         */
         $scope.sendCommandRequest = function(command) {
-            /* LS command */
-            console.log("COMANDOLO : " + $scope.command);
+            console.log("$scope.command = " + $scope.command);
+
+            /* Case Download */
             if ($scope.command.startsWith("dw")) {
                 location.replace('/download/?command=' + $scope.command + '&currentDir=' + $scope.currentDir);
-            } else if ($scope.command.startsWith("up")) {
-                console.log("LOG :" + $scope.command);
+            }/* Case Upload */
+            else if ($scope.command.startsWith("up")) {
                 $showUploadForm = true;
                 return;
-            } else if ($scope.command.startsWith("ls")) {
+            }/* Case Listing Files and Directory = ls command */
+            else if ($scope.command.startsWith("ls")) {
                 $CommandsService.ls($scope.command, $scope.currentDir).then(function(data) {
                     var output = [];
                     for (i = 0; i < Object.keys(data.data).length; i++) {
@@ -25,12 +31,10 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
                     $scope.files = output;
                 });
                 return;
-            } else if ($scope.command.startsWith("find")) {
-
-
-            } else {
-
-                /* Other Commands */
+            } /* Case Find */
+            else if ($scope.command.startsWith("find")) {
+                // coming soon
+            } else { /* Case Other Commands (among the allowed ones) */
                 var commandName = "";
                 if ($scope.command.indexOf(' ') != -1)
                     commandName = $scope.command.split(' ')[0];
@@ -58,6 +62,10 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
             }
         }
 
+        /*
+         * This function allows navigating through directories: when clicking on one of the entries showed in the main
+         * file manager view, if that is a directory, the client sends an 'ls command' to the server to virtually open the directory
+         */
         $scope.lsCommandRequestOnClick = function(event) {
             var event_target = event.target;
             var clicked_row = $(event_target).parent();
@@ -67,15 +75,15 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
             this.sendCommandRequest($scope.command);
         }
 
+        /* This function sends a command to the server when clicking on the 'exec' button on the right part of the search bar */
         $scope.sendBarCommandRequest = function() {
             console.log("COMMAND : " + $scope.command);
             $scope.sendCommandRequest($scope.command);
         }
 
-        /* home page directory file list */
+        /* home page directory file listing */
         if ($scope.homePage == false) {
             $scope.sendCommandRequest("ls");
             $scope.homePage = true;
         }
-
     }]);

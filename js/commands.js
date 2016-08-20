@@ -3,6 +3,7 @@ var commandsModule = angular.module('Commands', []).
 service('CommandsService', function($http){
 	var files = {};
 
+    /* This function allows sending an 'ls command' to the server */
 	this.ls = function(command, currentDir){
 	    console.log("LOG-LS");
 	    var promise = $http.get("/command/", {
@@ -53,7 +54,7 @@ service('CommandsService', function($http){
 	};//fin ls method
 
 
-
+    /* This function allows sending a find command to the server */
 	this.find = function(command, currentDir){
         $http.get("/command/", {
             params: {
@@ -101,6 +102,7 @@ service('CommandsService', function($http){
         });
 	};// end of find method
 
+    /* Function for sending general commands to the server */
 	this.else = function(command, currentDir){
 	    console.log("Sending Command : " + command);
 	    $http.get("/command/", {
