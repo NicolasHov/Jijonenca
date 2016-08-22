@@ -13,11 +13,11 @@ service('CommandsService', function($http){
 	        }
 	    })
 	    .success(function(data, status, headers, config) {
-	        if (data["type"] == "1") {
-	            console.log("Error: " + data["message"]);
+	        if (data["type"] == false) {
+	            console.log("Error: " + data['data']);
 	        } else {
 	            /* updating file manager view */
-	            data[0] = {
+	            data.data[0] = {
 	                "name": "..",
 	                "size": "0",
 	                "last_modified": "/",

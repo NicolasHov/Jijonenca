@@ -25,10 +25,11 @@ var cappuccinoWebClient = angular.module('cappuccinoWebClient', ['Commands'])
             else if ($scope.command.startsWith("ls")) {
                 $CommandsService.ls($scope.command, $scope.currentDir).then(function(data) {
                     var output = [];
-                    for (i = 0; i < Object.keys(data.data).length; i++) {
+                    for (i = 0; i < data.data.length; i++) {
                         output.push(data.data[i]);
                     }
-                    $scope.files = output;
+                    $scope.files = data.data['data'];
+                    console.log('$scope.files --> ' + JSON.stringify($scope.files));
                 });
                 return;
             } /* Case Find */
