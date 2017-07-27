@@ -1,5 +1,7 @@
 # Easymove
 
+[![Build Status](https://travis-ci.com/yvan-sraka/easymove-client.svg?token=r9S39DVzZNKVuhr9yRC6&branch=master)](https://travis-ci.com/yvan-sraka/easymove-client)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.5.
 
 ## Development server
