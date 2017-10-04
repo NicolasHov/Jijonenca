@@ -9,7 +9,9 @@
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let file of fileList">
-    {{file}}
+      <ion-icon *ngIf="file.isDirectory" name="folder"></ion-icon>
+      <ion-icon *ngIf="!file.isDirectory" name="document"></ion-icon>
+      {{file.path}}
     </ion-item>
   </ion-list>
 </ion-content>
