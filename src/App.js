@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import './App.css'
-import firebase from "firebase/app"
-import "firebase/database"
 import { Remarkable } from 'remarkable'
-
-firebase.initializeApp({
-  apiKey: "AIzaSyCzxMMP4rTH-qmKJs-4IyvQTTVm6yip4XY",
-  authDomain: "jijonenca-38086.firebaseapp.com",
-  databaseURL: "https://jijonenca-38086-default-rtdb.firebaseio.com",
-  projectId: "jijonenca-38086",
-  storageBucket: "jijonenca-38086.appspot.com",
-  messagingSenderId: "642565613268",
-  appId: "1:642565613268:web:9a34d9a0d0cdc129d2bd41"
-});
+import panettone from './panettone';
+import './App.css'
 
 const MarkdownEditor = props => {
   const [value, setValue] = useState('')
   const md = new Remarkable()
-  const content = firebase.database().ref('files/' + props.id + '/content')
+  const content = panettone.database().ref(props.path)
 
   useEffect(() => {
     content.on('value', (snapshot) => {
@@ -32,9 +21,7 @@ const MarkdownEditor = props => {
         id="markdown-content"
         value={value}
         onChange={e => {
-          firebase.database().ref('files/' + props.id).set({
-            content: e.target.value,
-          })
+          panettone.database().ref(props.path).set(e.target.value)
         }}
       />
       <div
@@ -48,7 +35,7 @@ const MarkdownEditor = props => {
 function App() {
   return (
     <div className="App">
-      <MarkdownEditor id={1234567890} />
+      <MarkdownEditor path={"mySecretProject/README.md"} />
     </div>
   )
 }
