@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css'
 import firebase from "firebase/app"
 import "firebase/database"
@@ -14,61 +14,43 @@ firebase.initializeApp({
   appId: "1:642565613268:web:9a34d9a0d0cdc129d2bd41"
 });
 
-class MarkdownEditor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.md = new Remarkable();
-    this.handleChange = this.handleChange.bind(this);
-    this.state = { value: '' };
-  }
+const MarkdownEditor = props => {
+  const [value, setValue] = useState('')
+  const md = new Remarkable()
+  const content = firebase.database().ref('files/' + props.id + '/content')
 
-  componentDidMount() {
-    let fileContent = firebase.database().ref('files/' + 1234567890 + '/content');
-    fileContent.on('value', (snapshot) => {
-      const data = snapshot.val();
-      this.setState({ value: data });
+  useEffect(() => {
+    content.on('value', (snapshot) => {
+      const data = snapshot.val()
+      setValue(data)
     })
-  }
+  }, [])
 
-  handleChange(e) {
-    this.setState({ value: e.target.value });
-    firebase.database().ref('files/' + 1234567890).set({
-      content: e.target.value,
-    });
-  }
-
-  getRawMarkup() {
-    return { __html: this.md.render(this.state.value) };
-  }
-
-  render() {
-    return (
-      <div className="MarkdownEditor">
-        <h3>Entrée</h3>
-        <label htmlFor="markdown-content">
-          Saisissez du markdown
-        </label>
-        <textarea
-          id="markdown-content"
-          onChange={this.handleChange}
-          value={this.state.value}
-        />
-        <h3>Sortie</h3>
-        <div
-          className="content"
-          dangerouslySetInnerHTML={this.getRawMarkup()}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="MarkdownEditor">
+      <textarea
+        id="markdown-content"
+        value={value}
+        onChange={e => {
+          firebase.database().ref('files/' + props.id).set({
+            content: e.target.value,
+          })
+        }}
+      />
+      <div
+        className="content"
+        dangerouslySetInnerHTML={{ __html: md.render(value) }}
+      />
+    </div>
+  )
 }
 
 function App() {
   return (
     <div className="App">
-      <MarkdownEditor />
+      <MarkdownEditor id={1234567890} />
     </div>
-  );
+  )
 }
 
 export default App;
