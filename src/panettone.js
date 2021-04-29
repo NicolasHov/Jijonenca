@@ -1,19 +1,20 @@
-let GLOBAL_DIRTY_STATE;
-let MAGIC_CALLBACK;
+const e = {};
+const f = {};
+
+const readFile = (path) => f[path]
+const writeFile = (path, value) => { f[path] = value }
 
 const panettone = {
-    initializeApp: options => { },
     database: () => {
         const ref = path => {
+            e[path] = e[path] || { value: (_) => { } }
             const on = (eventType, callback) => {
-                MAGIC_CALLBACK = callback;
+                e[path][eventType] = callback
             }
             const set = value => {
-                GLOBAL_DIRTY_STATE = value
-                const snapshot = {
-                    val: () => GLOBAL_DIRTY_STATE
-                }
-                MAGIC_CALLBACK(snapshot)
+                writeFile(path, value)
+                const snapshot = { val: () => readFile(path) }
+                e[path]['value'](snapshot)
             }
             return { on, set }
         }
