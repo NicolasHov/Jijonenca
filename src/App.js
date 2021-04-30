@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
+import { 
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from 'react-router-dom'
 import { Remarkable } from 'remarkable'
-import panettone from './panettone';
+import panettone from './panettone'
 import './App.css'
 
-const MarkdownEditor = props => {
-  const [value, setValue] = useState('')
-  const md = new Remarkable()
-  const content = panettone.database().ref(props.path)
+const database = panettone.database('https://localhost:3000')
 
+const MarkdownEditor = props => {
+  const md = new Remarkable()
+  const [value, setValue] = useState('')
+  const { path } = useParams()
   useEffect(() => {
-    content.on('value', (snapshot) => {
-      const data = snapshot.val()
-      setValue(data)
+    database.ref(path).on('value', snapshot => {
+      setValue(snapshot.val())
     })
-  }, [])
+  }, [path])
 
   return (
     <div className="MarkdownEditor">
@@ -21,7 +28,7 @@ const MarkdownEditor = props => {
         id="markdown-content"
         value={value}
         onChange={e => {
-          panettone.database().ref(props.path).set(e.target.value)
+          database.ref(path).set(e.target.value)
         }}
       />
       <div
@@ -32,10 +39,18 @@ const MarkdownEditor = props => {
   )
 }
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <MarkdownEditor path={"mySecretProject/README.md"} />
+      <BrowserRouter>
+        <ul>
+          <li><Link to="/foo">foo</Link></li>
+          <li><Link to="/bar">bar</Link></li>
+        </ul>
+        <Switch>
+          <Route path="/:path" children={<MarkdownEditor />} />
+        </Switch>
+      </BrowserRouter>
     </div>
   )
 }
