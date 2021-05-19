@@ -7,7 +7,7 @@ import {
   useParams
 } from 'react-router-dom'
 import { Remarkable } from 'remarkable'
-import panettone from './panettone'
+import panettone from 'panettone'
 import './App.css'
 
 const database = panettone.database('https://localhost:3000')
